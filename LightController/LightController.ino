@@ -39,8 +39,8 @@ void recvWithEndMarker() {
     char endMarker = '\n';
     char rc;
     
-    while (Serial.available() > 0 && newData == false) {
-        rc = Serial.read();
+    while (mySerial.available() > 0 && newData == false) {
+        rc = mySerial.read();
 
         if (rc != endMarker) {
             SerialHSV[ndx] = rc;
@@ -65,22 +65,22 @@ void showColor(){
         hue = StringHSV.substring(0,3).toInt();
         sat = StringHSV.substring(3,6).toInt();
         val = StringHSV.substring(6,10).toInt();
-        Serial.println("Red:" + String(hue) + " Green:" + String(sat) + " Blue:" + String(val));
-        showAnalogRGB( CRGB( hue, sat, val) );
-//        Serial.println("Flash: Hue:" + String(hue) + " Saturation:" + String(sat) + " Value:" + String(val));
-//        showAnalogRGB( CHSV( hue, sat, val) );
+//        Serial.println("Red:" + String(hue) + " Green:" + String(sat) + " Blue:" + String(val));
+//        showAnalogRGB( CRGB( hue, sat, val) );
+        Serial.println("Flash: Hue:" + String(hue) + " Saturation:" + String(sat) + " Value:" + String(val));
+        showAnalogRGB( CHSV( hue, sat, val) );
       };
       newData = false;
     }
 }
 void blueFade(){
-  for(int x = 0; x < 255; x++){
+  for(int x = 0; x < 100; x++){
     showAnalogRGB( CHSV(128,255,x) );
-    delay(2);
+    delay(4);
   }
-  for(int x = 254; x < 255 && x > 1; x--){
+  for(int x = 99; x < 100 && x > 1; x--){
     showAnalogRGB( CHSV(128,255,x) );
-    delay(2);
+    delay(4);
   }
 }
 void setup() {
@@ -92,7 +92,7 @@ void setup() {
   mySerial.println("Connected via bluetooth to Howard's Light thingy");
   Serial.println("Connected via USB to Howard's Light thingy");
   mySerial.begin(9600);
-  colorBars();
+//  colorBars();
   blueFade();
   showAnalogRGB( CHSV(0,0,0) );
 }
